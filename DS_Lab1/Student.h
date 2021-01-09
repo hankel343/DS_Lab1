@@ -4,7 +4,8 @@
 #include <string>
 
 struct ClassRecord { //Record for storing class information
-	float grade = 0;
+	int gradeValue = 0;
+	char letterGrade;
 	std::string semester = "";
 };
 
@@ -15,25 +16,57 @@ private:
 	struct ClassRecord Classes[100]; //Array of records that stores class info.
 	float gpa;
 
+	//Private method for setting grade letter:
+	char SetLetterGrade(int inputGradeValue);
+
 public:
 	//Constructor:
 	Student();
+	//Pre: None
+	//Post: Object of class Student is instantiated
 
 	//Getters:
-	std::string GetName();
-	int GetId();
-	float GetClassGrade(int classNumber);
+	void GetName();
+	//Pre: Student object exists.
+	//Post: Name field returned
+
+	void GetId();
+	//Pre: Student object exists.
+	//Post: Id field returned
+
+	void GetClassGrade(int classNumber);
+	//Pre: Student object exists.
+	//Post: Class grade returned
+
 	std::string GetClassSemester(int classNumber);
+	//Pre: Student object exists.
+	//Post: Class semester returned
 
 	//Setters:
 	void SetName(std::string inputName);
+	//Pre: Student object exists.
+	//Post: Student name returned.
+
 	void SetId(int inputId);
-	void SetClassGrade(int classNumber, char inputGrade);
+	//Pre: Student object exists.
+	//Post: Student id returned
+
+	void SetClassGrade(int classNumber, int inputGrade);
+	//Pre: Student object exists.
+	//Post: Class grade returned.
+
 	void SetClassSemester(int classNumber, std::string inputSemester);
+	//Pre: Student object exists.
+	//Post: Class semester returned.
 
 	//Other methods:
-	float CalculateGpa();
+	void CalculateGpa();
+	//Pre: Student object exists.
+	//Post: GPA is calculated and returned.
+
 	void MatchGrade(char inputGrade);
+	//Pre: Student object exists.
+	//Post: All classes that have a matching grade to the input value are printed to the screen.
 };
 
 
