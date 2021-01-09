@@ -4,7 +4,7 @@
 #include <string>
 
 struct ClassRecord { //Record for storing class information
-	int gradeValue = 0;
+	int gradeValue = NULL;
 	char letterGrade;
 	std::string semester = "";
 };
@@ -12,7 +12,7 @@ struct ClassRecord { //Record for storing class information
 class Student {
 private:
 	std::string name;
-	int id;
+	int id = NULL;
 	struct ClassRecord Classes[100]; //Array of records that stores class info.
 	float gpa;
 
@@ -22,8 +22,6 @@ private:
 public:
 	//Constructor:
 	Student();
-	//Pre: None
-	//Post: Object of class Student is instantiated
 
 	//Getters:
 	void GetName();
@@ -38,7 +36,7 @@ public:
 	//Pre: Student object exists.
 	//Post: Class grade returned
 
-	std::string GetClassSemester(int classNumber);
+	void GetClassSemester(int classNumber);
 	//Pre: Student object exists.
 	//Post: Class semester returned
 
@@ -67,6 +65,8 @@ public:
 	void MatchGrade(char inputGrade);
 	//Pre: Student object exists.
 	//Post: All classes that have a matching grade to the input value are printed to the screen.
+
+	void PrintClasses();
 };
 
 
