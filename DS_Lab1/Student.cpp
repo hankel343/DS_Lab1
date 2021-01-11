@@ -75,17 +75,19 @@ void Student::SetClassSemester(int classNumber, std::string inputSemester) {
 //Other Methods
 void Student::CalculateGpa() {
 	float sum = 0.0;
-	int i = 0;
+	int i = 0, j = 0;
 	if (Classes[i].gradeValue == NULL && Classes[i].semester == "") {
 		std::cout << "\nYou haven't entered any grades yet.\n\n";
 	}
 	else {
 		//Loop through array of class records while i is less than 100 AND the next record isn't empty.
-		while (i < 100 && (Classes[i].gradeValue != NULL && Classes[i].semester != "")) {
-			sum += Classes[i].gradeValue;
-			i++;
+		for (i = 0; i < 100; i++) {
+			if (Classes[i].gradeValue != NULL) {
+				sum += Classes[i].gradeValue;
+				j++;
+			}
 		}
-		std::cout << std::setprecision(4) << "GPA: " << float(sum) / i << std::endl;
+		std::cout << std::setprecision(4) << "GPA: " << float(sum) / j << std::endl;
 	}
 }
 
@@ -95,14 +97,13 @@ void Student::MatchGrade(char inputGrade) {
 	if (Classes[i].gradeValue == NULL && Classes[i].semester == "") {
 		std::cout << "\nThere are no grades to match.\n\n";
 	}
-	while (i < 100 && (Classes[i].letterGrade != NULL && Classes[i].semester != "")) {
+	for (i = 0; i < 100; i++) {
 		if (toupper(inputGrade) == Classes[i].letterGrade) {
 			std::cout << "Class number: " << i << std::endl;
 			std::cout << "Letter grade: " << Classes[i].letterGrade << std::endl;
 			std::cout << "Grade value: " << Classes[i].gradeValue << std::endl;
 			std::cout << std::endl;
 		}
-		i++;
 	}
 }
 
@@ -111,12 +112,17 @@ void Student::PrintClasses() {
 			std::cout << "\nThere are no classes entered currently.\n\n";
 		}
 		else {
-			int i = 0;
-			while (Classes[i].gradeValue != NULL && Classes[i].semester != "") {
-				std::cout << "Class number: " << i << std::endl;
-				std::cout << "Class grade value: " << Classes[i].gradeValue << std::endl;
-				std::cout << "Class letter grade: " << Classes[i].letterGrade << std::endl << std::endl;
-				i++;
+			for (int i = 0; i < 100; i++) {
+				if (Classes[i].gradeValue != NULL && Classes[i].letterGrade != NULL) {
+					std::cout << "Class number: " << i << std::endl;
+					std::cout << "Class grade value: " << Classes[i].gradeValue << std::endl;
+					std::cout << "Class letter grade: " << Classes[i].letterGrade << std::endl;
+					if (Classes[i].semester == "") {
+						std::cout << "Semester taken: semester not entered.\n" << std::endl;
+					} else {
+						std::cout << "Semester taken: \n" << Classes[i].semester << std::endl;
+					}
+				}
 			}
 		}
 }
