@@ -1,5 +1,6 @@
 #include "Student.h"
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ int main()
 {
 	Student test;
 	ProgramMenu(test);
-
+	cout << "Goodbye...\n";
 	return 0;
 }
 
@@ -21,10 +22,9 @@ void ProgramMenu(Student &obj) {
 	{
 		cout << "Enter your choice from the menu below: \n\n";
 
-		cout << "0 - Set name\n";
-		cout << "1 - Set id\n";
-		cout << "2 - Set class grade\n";
-		cout << "3 - Set class semester\n";
+		cout << "1 - Set name\n";
+		cout << "2 - Set id\n";
+		cout << "3 - Create class\n";
 		cout << "4 - Get name\n";
 		cout << "5 - Get id\n";
 		cout << "6 - Get class grade\n";
@@ -47,34 +47,21 @@ void ProgramMenu(Student &obj) {
 void ProcessSelection(Student &obj, char selection) {
 
 	switch (toupper(selection)) {
-	case '0': {
+	case '1': {
 		string name;
 		cout << "Enter the name of the student: ";
-		cin >> name;
+		cin.ignore(100, '\n');
+		getline(cin, name);
 		obj.SetName(name);
 		break;
-	} case '1': {
+	} case '2': {
 		int id;
 		cout << "Enter the student's id: ";
 		cin >> id;
 		obj.SetId(id);
 		break;
-	} case '2': {
-		int classNum, gradeValue;
-		cout << "Enter the class number: ";
-		cin >> classNum;
-		cout << "\nEnter the grade received (integer): ";
-		cin >> gradeValue;
-		obj.SetClassGrade(classNum, gradeValue);
-		break;
 	} case '3': {
-		int classNum;
-		string inputSemester;
-		cout << "Enter the class number: ";
-		cin >> classNum;
-		cout << "\nEnter the semester the class was taken (fall/spring): ";
-		cin >> inputSemester;
-		obj.SetClassSemester(classNum, inputSemester);
+		obj.CreateClass(obj);
 		break;
 	} case '4': {
 		obj.GetName();
@@ -83,16 +70,22 @@ void ProcessSelection(Student &obj, char selection) {
 		obj.GetId();
 		break;
 	} case '6': {
-		int classNum;
-		cout << "Enter the class number you want the grade for: ";
-		cin >> classNum;
-		obj.GetClassGrade(classNum);
+		string className = "";
+		cout << "Here is the list of classes the student has taken: ";
+		obj.PrintClasses();
+		cout << "\n\nEnter the class name you want the grade for: ";
+		cin >> className;
+		if (obj.GetClassGrade(obj, className) != '-1') {
+			cout << "\n\nEntered class name " << "\"" << className << "\" was not found.\n" << endl;
+		} else {
+			cout << "Grade for " << "\"" << className << "\": " << obj.GetClassGrade(obj, className) << endl;
+		}
 		break;
 	} case '7': {
-		int classNum;
-		cout << "Enter the class number you want the semester for: ";
-		cin >> classNum;
-		obj.GetClassSemester(classNum);
+		string className;
+		cout << "Enter the class name you want the semester for: ";
+		cin >> className;
+		cout << obj.GetClassSemester(obj, className) << endl;
 		break;
 	} case '8': {
 		obj.CalculateGpa();
@@ -112,6 +105,4 @@ void ProcessSelection(Student &obj, char selection) {
 		break;
 	}
 	}
-
-	
 }

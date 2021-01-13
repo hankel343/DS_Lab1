@@ -4,6 +4,7 @@
 #include <string>
 
 struct ClassRecord { //Record for storing class information
+	std::string name = "";
 	int gradeValue = NULL;
 	char letterGrade;
 	std::string semester = "";
@@ -13,6 +14,7 @@ class Student {
 private:
 	std::string name;
 	int id = NULL;
+	int classIndex = 0;
 	struct ClassRecord Classes[100]; //Array of records that stores class info.
 	float gpa;
 
@@ -32,11 +34,11 @@ public:
 	//Pre: Student object exists.
 	//Post: Id field returned
 
-	void GetClassGrade(int classNumber);
+	char GetClassGrade(Student obj, std::string className);
 	//Pre: Student object exists.
 	//Post: Class grade returned
 
-	void GetClassSemester(int classNumber);
+	std::string GetClassSemester(Student obj, std::string className);
 	//Pre: Student object exists.
 	//Post: Class semester returned
 
@@ -45,17 +47,13 @@ public:
 	//Pre: Student object exists.
 	//Post: Student name returned.
 
-	void SetId(int inputId);
+	void SetId(int studentId);
 	//Pre: Student object exists.
-	//Post: Student id returned
+	//Post: Student id is returned.
 
-	void SetClassGrade(int classNumber, int inputGrade);
+	void CreateClass(Student &obj);
 	//Pre: Student object exists.
-	//Post: Class grade returned.
-
-	void SetClassSemester(int classNumber, std::string inputSemester);
-	//Pre: Student object exists.
-	//Post: Class semester returned.
+	//Post: Student object now contains a class.
 
 	//Other methods:
 	void CalculateGpa();

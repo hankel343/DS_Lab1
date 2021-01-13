@@ -23,21 +23,24 @@ void Student::GetId() {
 	}
 }
 
-void Student::GetClassGrade(int classNumber) {
-	if (Classes[classNumber].gradeValue != NULL) {
-		std::cout << "Grade: " << Classes[classNumber].letterGrade << std::endl;
-		std::cout << "Value: " << Classes[classNumber].gradeValue << std::endl;
-	} else {
-		std::cout << "\nThis class has no input grade.\n\n";
+char Student::GetClassGrade(Student obj, std::string className) {
+	for (int i = 0; i < 100; i++) {
+		if (Classes[i].name == className) {
+			return Classes[i].letterGrade;
+		}
 	}
+
+	return '-1';
 }
 
-void Student::GetClassSemester(int classNumber) {
-	if (Classes[classNumber].semester == "") {
-		std::cout << "\nNo semester has been entered for this class.\n\n";
-	} else {
-		std::cout << Classes[classNumber].semester << std::endl;
+std::string Student::GetClassSemester(Student obj, std::string className) {
+	for (int i = 0; i < 100; i++) {
+		if (Classes[i].name == className) {
+			return Classes[i].semester;
+		}
 	}
+
+	return "\nUser entered class name does not have an associated semester field.\n";
 }
 
 //Setters
@@ -45,8 +48,8 @@ void Student::SetName(std::string inputName) {
 	name = inputName;
 }
 
-void Student::SetId(int inputId) {
-	id = inputId;
+void Student::SetId(int studentId) {
+	id = studentId;
 }
 
 char Student::SetLetterGrade(int inputGradeValue) {
@@ -63,13 +66,43 @@ char Student::SetLetterGrade(int inputGradeValue) {
 	}
 }
 
-void Student::SetClassGrade(int classNumber, int inputGrade) {
-	Classes[classNumber].letterGrade = SetLetterGrade(inputGrade);
-	Classes[classNumber].gradeValue = inputGrade;
-}
+void Student::CreateClass(Student &obj) {
+	std::string className, semesterInput;
+	int gradeValue;
 
-void Student::SetClassSemester(int classNumber, std::string inputSemester) {
-	Classes[classNumber].semester = inputSemester;
+	std::cout << "\nEnter the name of the class: ";
+	std::cin.ignore(100, '\n');
+	while (!(getline(std::cin, className))) {
+		std::cin.clear();
+		std::cin.ignore(100, '\n');
+		std::cout << "\aYou have entered invalid data - your input should be a string.\n";
+		std::cout << "(i.e. English, Calculus, Art)\n\n";
+		std::cout << "Try again: ";
+	}
+
+	std::cout << "\nEnter the grade received for this class (integer): ";
+	while (!(std::cin >> gradeValue) || !(gradeValue > 0 && gradeValue <= 100)) {
+		std::cin.clear();
+		std::cin.ignore(100, '\n');
+		std::cout << "\aYou have entered invalid data - your input should be an integer between 0 and 100 inclusive.\n";
+		std::cout << "(i.e 93, 67, 76)\n\n";
+		std::cout << "Try again: ";
+	}
+
+	std::cout << "\nEnter the semester that this grade was taken: ";
+	while (!(std::cin >> semesterInput)) {
+		std::cin.clear();
+		std::cin.ignore(100, '\n');
+		std::cout << "\aYou have entered invalid data - your input should be a string.\n";
+		std::cout << "(i.e. Fall or Spring)\n\n";
+		std::cout << "Try again: ";
+	}
+
+	obj.Classes[classIndex].name = className;
+	obj.Classes[classIndex].gradeValue = gradeValue;
+	obj.Classes[classIndex].letterGrade = SetLetterGrade(gradeValue);
+	obj.Classes[classIndex].semester = semesterInput;
+	obj.classIndex++; //Increments class index for next class entered.
 }
 
 //Other Methods
@@ -99,7 +132,7 @@ void Student::MatchGrade(char inputGrade) {
 	}
 	for (i = 0; i < 100; i++) {
 		if (toupper(inputGrade) == Classes[i].letterGrade) {
-			std::cout << "Class number: " << i << std::endl;
+			std::cout << "Class name: " << Classes[i].name << std::endl;
 			std::cout << "Letter grade: " << Classes[i].letterGrade << std::endl;
 			std::cout << "Grade value: " << Classes[i].gradeValue << std::endl;
 			std::cout << std::endl;
@@ -108,19 +141,19 @@ void Student::MatchGrade(char inputGrade) {
 }
 
 void Student::PrintClasses() {
-		if (Classes[0].gradeValue == NULL && Classes[0].semester == "") {
+		if (classIndex == 0 && Classes[0].name == "") {
 			std::cout << "\nThere are no classes entered currently.\n\n";
 		}
 		else {
 			for (int i = 0; i < 100; i++) {
 				if (Classes[i].gradeValue != NULL && Classes[i].letterGrade != NULL) {
-					std::cout << "Class number: " << i << std::endl;
+					std::cout << "\nClass name: " << Classes[i].name << std::endl;
 					std::cout << "Class grade value: " << Classes[i].gradeValue << std::endl;
 					std::cout << "Class letter grade: " << Classes[i].letterGrade << std::endl;
 					if (Classes[i].semester == "") {
 						std::cout << "Semester taken: semester not entered.\n" << std::endl;
 					} else {
-						std::cout << "Semester taken: \n" << Classes[i].semester << std::endl;
+						std::cout << "Semester taken: " << Classes[i].semester << std::endl;
 					}
 				}
 			}
