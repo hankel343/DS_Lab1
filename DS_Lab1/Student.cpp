@@ -24,16 +24,19 @@ void Student::GetId() {
 }
 
 char Student::GetClassGrade(Student obj, std::string className) {
+	//For loop scans through array of structs to find a class with a matching name field and returns its letter grade.
 	for (int i = 0; i < 100; i++) {
 		if (Classes[i].name == className) {
 			return Classes[i].letterGrade;
 		}
 	}
 
-	return '-1';
+	//Returns -1 as a flag that the class was not found to print the appropriate message.
+	return -1;
 }
 
 std::string Student::GetClassSemester(Student obj, std::string className) {
+	//For loop scans through array of class structs in Student object to find a matching class name and prints its semester.
 	for (int i = 0; i < 100; i++) {
 		if (Classes[i].name == className) {
 			return Classes[i].semester;
@@ -70,9 +73,15 @@ void Student::CreateClass(Student &obj) {
 	std::string className, semesterInput;
 	int gradeValue;
 
+	//Statement checks if the user has reached the limit of 100 entries for classes.
+	if (obj.classIndex == 100) {
+		std::cout << "\nThe number of classes allowed has been reached.\n";
+		return;
+	}
+
 	std::cout << "\nEnter the name of the class: ";
 	std::cin.ignore(100, '\n');
-	while (!(getline(std::cin, className))) {
+	while (!(getline(std::cin, className))) { //While loop used for case of bad data entered into cin stream
 		std::cin.clear();
 		std::cin.ignore(100, '\n');
 		std::cout << "\aYou have entered invalid data - your input should be a string.\n";
@@ -81,7 +90,7 @@ void Student::CreateClass(Student &obj) {
 	}
 
 	std::cout << "\nEnter the grade received for this class (integer): ";
-	while (!(std::cin >> gradeValue) || !(gradeValue > 0 && gradeValue <= 100)) {
+	while (!(std::cin >> gradeValue) || !(gradeValue > 0 && gradeValue <= 100)) { //While loop used for case of bad data entered into cin stream
 		std::cin.clear();
 		std::cin.ignore(100, '\n');
 		std::cout << "\aYou have entered invalid data - your input should be an integer between 0 and 100 inclusive.\n";
@@ -90,7 +99,7 @@ void Student::CreateClass(Student &obj) {
 	}
 
 	std::cout << "\nEnter the semester that this grade was taken: ";
-	while (!(std::cin >> semesterInput)) {
+	while (!(std::cin >> semesterInput)) { //While loop used for case of bad data entered into cin stream
 		std::cin.clear();
 		std::cin.ignore(100, '\n');
 		std::cout << "\aYou have entered invalid data - your input should be a string.\n";
@@ -98,9 +107,11 @@ void Student::CreateClass(Student &obj) {
 		std::cout << "Try again: ";
 	}
 
+	//Class attributes are set by the following statements from the user's input.
 	obj.Classes[classIndex].name = className;
 	obj.Classes[classIndex].gradeValue = gradeValue;
 	obj.Classes[classIndex].letterGrade = SetLetterGrade(gradeValue);
+	obj.Classes[classIndex].gpaEquivalent = ConvertToGpaScale(gradeValue);
 	obj.Classes[classIndex].semester = semesterInput;
 	obj.classIndex++; //Increments class index for next class entered.
 }
@@ -109,27 +120,28 @@ void Student::CreateClass(Student &obj) {
 void Student::CalculateGpa() {
 	float sum = 0.0;
 	int i = 0, j = 0;
-	if (Classes[i].gradeValue == NULL && Classes[i].semester == "") {
+	if (Classes[i].gradeValue == NULL && Classes[i].semester == "") { //Checks to see if no data has been entered yet.
 		std::cout << "\nYou haven't entered any grades yet.\n\n";
-	}
-	else {
-		//Loop through array of class records while i is less than 100 AND the next record isn't empty.
+	} else {
+		//Loop through array of struct classes and sum all gpa entries that are not empty.
 		for (i = 0; i < 100; i++) {
-			if (Classes[i].gradeValue != NULL) {
-				sum += Classes[i].gradeValue;
-				j++;
+			if (Classes[i].gpaEquivalent != NULL) {
+				sum += Classes[i].gpaEquivalent;
+				j++; //j counts how many non-zero entries for gpa are found
 			}
 		}
-		std::cout << std::setprecision(4) << "GPA: " << float(sum) / j << std::endl;
+		std::cout << std::setprecision(4) << "GPA: " << sum / j << std::endl;
 	}
 }
 
 void Student::MatchGrade(char inputGrade) {
 
 	int i = 0;
-	if (Classes[i].gradeValue == NULL && Classes[i].semester == "") {
+	if (Classes[i].gradeValue == NULL && Classes[i].semester == "") { //Checks to see if any grades have been entered yet.
 		std::cout << "\nThere are no grades to match.\n\n";
+		return;
 	}
+	//Loop scans through array of struct classes to find structs that have matching letterGrade attributes.
 	for (i = 0; i < 100; i++) {
 		if (toupper(inputGrade) == Classes[i].letterGrade) {
 			std::cout << "Class name: " << Classes[i].name << std::endl;
@@ -143,19 +155,39 @@ void Student::MatchGrade(char inputGrade) {
 void Student::PrintClasses() {
 		if (classIndex == 0 && Classes[0].name == "") {
 			std::cout << "\nThere are no classes entered currently.\n\n";
-		}
-		else {
+			return;
+		} else {
+			//Scan through array struct classes. Find and print all non-zero entries.
 			for (int i = 0; i < 100; i++) {
 				if (Classes[i].gradeValue != NULL && Classes[i].letterGrade != NULL) {
 					std::cout << "\nClass name: " << Classes[i].name << std::endl;
-					std::cout << "Class grade value: " << Classes[i].gradeValue << std::endl;
-					std::cout << "Class letter grade: " << Classes[i].letterGrade << std::endl;
-					if (Classes[i].semester == "") {
-						std::cout << "Semester taken: semester not entered.\n" << std::endl;
-					} else {
-						std::cout << "Semester taken: " << Classes[i].semester << std::endl;
-					}
 				}
 			}
 		}
+}
+
+float Student::ConvertToGpaScale(int inputGradeValue) {
+	if (inputGradeValue <= 100 && inputGradeValue >= 93) {
+		return 4.0;
+	} else if (inputGradeValue <= 92 && inputGradeValue >= 90) {
+		return 3.7;
+	} else if (inputGradeValue <= 89 && inputGradeValue >= 87) {
+		return 3.3;
+	} else if (inputGradeValue <= 86 && inputGradeValue >= 83) {
+		return 3.0;
+	} else if (inputGradeValue <= 82 && inputGradeValue >= 80) {
+		return 2.7;
+	} else if (inputGradeValue <= 79 && inputGradeValue >= 77) {
+		return 2.3;
+	} else if (inputGradeValue <= 76 && inputGradeValue >= 73) {
+		return 2.0;
+	} else if (inputGradeValue <= 72 && inputGradeValue >= 70) {
+		return 1.7;
+	} else if (inputGradeValue <= 69 && inputGradeValue >= 67) {
+		return 1.3;
+	} else if (inputGradeValue <= 66 && inputGradeValue >= 65) {
+		return 1.0;
+	} else {
+		return 0.0;
+	}
 }

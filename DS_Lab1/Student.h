@@ -6,20 +6,27 @@
 struct ClassRecord { //Record for storing class information
 	std::string name = "";
 	int gradeValue = NULL;
-	char letterGrade;
+	float gpaEquivalent = NULL;
+	char letterGrade = NULL;
 	std::string semester = "";
 };
 
 class Student {
 private:
-	std::string name;
+	std::string name = "";
 	int id = NULL;
 	int classIndex = 0;
-	struct ClassRecord Classes[100]; //Array of records that stores class info.
-	float gpa;
+	struct ClassRecord Classes[100]; //Array of records that store class info.
+	float gpa = 0.0;
 
-	//Private method for setting grade letter:
+	//Private methods for setting grade information.
 	char SetLetterGrade(int inputGradeValue);
+	//Pre: A valid integer for a grade has been entered.
+	//Post: The corresponding letter grade is recorded for the class.
+
+	float ConvertToGpaScale(int inputGradeValue);
+	//Pre: A valid integer representing a grade has been entered.
+	//Post: The corresponding gpa value is recorded for the class.
 
 public:
 	//Constructor:
@@ -65,6 +72,8 @@ public:
 	//Post: All classes that have a matching grade to the input value are printed to the screen.
 
 	void PrintClasses();
+	//Pre: Student object exists.
+	//Post: All classes are printed to the console terminal.
 };
 
 

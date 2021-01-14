@@ -1,3 +1,10 @@
+/*Hankel Haldin
+* C++ Data Structures
+* Lab 1: Creating a student class.
+* Description: This program provides a menu to test operations on a Student ADT.
+* Operations include getting and setting student and class attributes, calculating gpa -
+* and matching all classes with a specific grade.*/
+
 #include "Student.h"
 #include <iostream>
 #include <string>
@@ -5,7 +12,12 @@
 using namespace std;
 
 void ProgramMenu(Student &obj);
+//Pre: Student object exists.
+//Post: A menu is presented for the Student ADT.
+
 void ProcessSelection(Student &obj, char selection);
+//Pre: Student object exists and user has input a value.
+//Post: User input is processed and the appropriate output is presented in the terminal.
 
 int main()
 {
@@ -20,7 +32,7 @@ void ProgramMenu(Student &obj) {
 
 	do
 	{
-		cout << "Enter your choice from the menu below: \n\n";
+		cout << "\n\nEnter your choice from the menu below:\n";
 
 		cout << "1 - Set name\n";
 		cout << "2 - Set id\n";
@@ -75,14 +87,16 @@ void ProcessSelection(Student &obj, char selection) {
 		obj.PrintClasses();
 		cout << "\n\nEnter the class name you want the grade for: ";
 		cin >> className;
-		if (obj.GetClassGrade(obj, className) != '-1') {
-			cout << "\n\nEntered class name " << "\"" << className << "\" was not found.\n" << endl;
-		} else {
+		if (obj.GetClassGrade(obj, className) != -1) {
 			cout << "Grade for " << "\"" << className << "\": " << obj.GetClassGrade(obj, className) << endl;
+		} else {
+			cout << "\n\nEntered class name " << "\"" << className << "\" was not found.\n" << endl;
 		}
 		break;
 	} case '7': {
 		string className;
+		cout << "Here is a list of all entered class names: \n";
+		obj.PrintClasses();
 		cout << "Enter the class name you want the semester for: ";
 		cin >> className;
 		cout << obj.GetClassSemester(obj, className) << endl;
