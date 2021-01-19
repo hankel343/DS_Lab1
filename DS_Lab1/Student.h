@@ -12,8 +12,8 @@ struct ClassRecord { //Record for storing class information
 };
 
 class Student {
-private:
-	std::string name = "";
+public:
+	std::string name = "Hankel";
 	int id = NULL;
 	int classIndex = 0;
 	struct ClassRecord Classes[100]; //Array of records that store class info.
@@ -28,7 +28,6 @@ private:
 	//Pre: A valid integer representing a grade has been entered.
 	//Post: The corresponding gpa value is recorded for the class.
 
-public:
 	//Constructor:
 	Student();
 

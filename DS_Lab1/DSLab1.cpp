@@ -1,5 +1,5 @@
 /*Hankel Haldin
-* C++ Data Structures
+* C++ Data Structures Spring 2021
 * Lab 1: Creating a student class.
 * Description: This program provides a menu to test operations on a Student ADT.
 * Operations include getting and setting student and class attributes, calculating gpa -
